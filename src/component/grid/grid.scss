@@ -3,9 +3,21 @@
         display: flex;
         width: 1000px;
         flex-wrap: wrap;
+        margin: 0 auto;
+        border: 1px solid yellow;
     }
     &-item {
         width: 20px;
         height: 20px;
+        border: 1px solid #333;
+        box-sizing: border-box;
+
+        &.line-player1 {
+            background: red;
+        }
+
+        &.line-player2 {
+            background: blue;
+        }
     }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Grid from './component/grid/grid';
 import HomePage from './component/homepage/homepage';
-import Game from './component/game/Game';
+import Game from './component/game/Game'
 import './App.scss';
 
 class App extends Component {
@@ -20,7 +20,7 @@ class App extends Component {
       case 'home':
         return <HomePage onPageChange={this.onPageChange} />;
       case 'game':
-        return <Grid />;
+        return <Game />;
       default:
         break;
     }
@@ -30,7 +30,6 @@ class App extends Component {
     return (
       <div className="App">
         {this.renderPageContent()}
-        <Game />
       </div>
     );
   }
