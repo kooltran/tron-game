@@ -1,0 +1,32 @@
+.home {
+    &--form {
+        width: 500px;
+        margin: 0 auto;
+    }   
+
+    &--item {
+        display: flex;
+        height: 50px;
+        margin-bottom: 10px;
+        justify-content: space-around;
+
+        &__two {
+            .player-color {
+                background: blue!important;
+            }
+        }
+
+        .player {
+            &-color {
+                display: inline-block;
+                width: 50px;
+                background: red;
+            }
+            
+            &-name {
+                box-sizing: border-box;
+                height: 50px;
+            }
+        }
+    }
+}

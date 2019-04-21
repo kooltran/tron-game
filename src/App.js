@@ -1,25 +1,34 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Grid from './component/grid/grid'
+import HomePage from './component/homepage/homepage'
+import './App.scss';
 
 class App extends Component {
+  state = {
+    currentPage: 'home'
+  }
+
+  onPageChange = (page) => {
+    this.setState({
+      currentPage: page
+    })
+  }
+
+  renderPageContent() {
+    switch (this.state.currentPage) {
+      case 'home':
+        return <HomePage onPageChange={this.onPageChange} />
+      case 'game':
+        return <Grid />
+      default:
+        break;
+    }
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {this.renderPageContent()}
       </div>
     );
   }
