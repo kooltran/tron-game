@@ -65,6 +65,9 @@ const calculateBorder = (gridWidth, gridHeight) => {
   return border;
 };
 
+const PLAYER_1_INIT_DIR = 'right';
+const PLAYER_2_INIT_DIR = 'left';
+
 class Game extends Component {
   constructor(props) {
     super(props);
@@ -80,13 +83,18 @@ class Game extends Component {
       map: map,
       player1: {
         path: [991],
-        direction: 'right'
+        direction: PLAYER_1_INIT_DIR // 'right'
       },
       player2: {
         path: [1033],
-        direction: 'left'
+        direction: PLAYER_2_INIT_DIR // 'left'
       }
     };
+  }
+
+  _directions = {
+    player1: PLAYER_1_INIT_DIR,
+    player2: PLAYER_2_INIT_DIR
   }
 
   updateIndex = () => {
@@ -106,10 +114,12 @@ class Game extends Component {
         return {
           player1: {
             ...prevState.player1,
+            direction: this._directions.player1,
             path: [...prevState.player1.path, player1NextIndex]
           },
           player2: {
             ...prevState.player2,
+            direction: this._directions.player2,
             path: [...prevState.player2.path, player2NextIndex]
           }
         };
@@ -175,6 +185,10 @@ class Game extends Component {
     }
   };
 
+  updatePrivateDirectionProperties = (playerKey, direction) => {
+    this._directions[playerKey] = direction;
+  }
+
   componentWillMount() {
     document.addEventListener(
       'keydown',
@@ -207,7 +221,7 @@ class Game extends Component {
                 break;
             }
 
-            this.updatePlayerDirection('player1', newDirection);
+            this.updatePrivateDirectionProperties('player1', newDirection);
           } else if (player2Keys.includes(e.key)) {
             const newDirection = mapPlayerToKeyToDirection['player2'][e.key];
             switch (newDirection) {
@@ -232,7 +246,7 @@ class Game extends Component {
                 }
                 break;
             }
-            this.updatePlayerDirection('player2', newDirection);
+            this.updatePrivateDirectionProperties('player2', newDirection);
           }
         }
       },
