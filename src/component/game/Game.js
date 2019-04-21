@@ -66,8 +66,16 @@ const calculateBorder = (gridWidth, gridHeight) => {
 class Game extends Component {
   constructor(props) {
     super(props);
+
+    let map = [];
+
+    for (let i = 0; i < boxPerRow * boxPerRow; i++) {
+      map.push(i);
+    }
+
     this.state = {
       timerId: null,
+      map: map,
       player1: {
         path: [11],
         direction: 'right'
@@ -111,6 +119,7 @@ class Game extends Component {
   };
 
   checkCollision = () => {
+    console.log(this.state);
     // const lastPlayer1 = getLastIndex(prevState.player1.path);
     // // const lastPlayer2 = getLastIndex(prevState.player2.path);
 
@@ -118,7 +127,7 @@ class Game extends Component {
 
     // }
     // //
-  }
+  };
 
   componentWillMount() {
     document.addEventListener(
@@ -143,7 +152,7 @@ class Game extends Component {
   componentDidMount() {
     this.setState({
       border: calculateBorder(boxPerRow, boxPerRow)
-    })
+    });
 
     const timerId = setInterval(this.updateIndex, 1000);
     this.setState({
@@ -161,7 +170,7 @@ class Game extends Component {
     this.setState(prevState => ({
       [playerId]: {
         ...prevState[playerId],
-        direction,
+        direction
       }
     }));
   };
