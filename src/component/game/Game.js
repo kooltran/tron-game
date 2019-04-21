@@ -24,8 +24,8 @@ const mapPlayerToKeyToDirection = {
 const player1Keys = Object.keys(mapPlayerToKeyToDirection.player1);
 const player2Keys = Object.keys(mapPlayerToKeyToDirection.player2);
 
-const boxPerColumn = 10;
-const boxPerRow = 50;
+const boxPerColumn = 45;
+const boxPerRow = 45;
 
 const getNextIndex = currentIndex => direction => {
   let nextIndex = currentIndex;
@@ -79,11 +79,11 @@ class Game extends Component {
       timerId: null,
       map: map,
       player1: {
-        path: [11],
+        path: [991],
         direction: 'right'
       },
       player2: {
-        path: [18],
+        path: [1033],
         direction: 'left'
       }
     };
@@ -123,41 +123,56 @@ class Game extends Component {
   checkCollision = () => {
     console.log(this.state);
     const lastPlayer1 = getLastIndex(this.state.player1.path);
-
     const lastPlayer2 = getLastIndex(this.state.player2.path);
+
+    let player1Dead = false;
+    let player2Dead = false;
 
     // check border
     if (this.state.border.includes(lastPlayer1)) {
       console.log('Player1 touch border');
+      player1Dead = true;
       this.cancelInterval();
     }
     if (this.state.border.includes(lastPlayer2)) {
       console.log('player2 touch border');
+      player2Dead = true;
       this.cancelInterval();
     }
 
     if (this.state.player1.path.slice(0, -1).includes(lastPlayer1)) {
       // check touch itself
       console.log('Player 1 touch itself');
+      player1Dead = true;
       this.cancelInterval();
     }
 
     if (this.state.player2.path.slice(0, -1).includes(lastPlayer2)) {
       // check touch itself
+      player2Dead = true;
       console.log('Player 2 touch itself');
       this.cancelInterval();
     }
 
     if (this.state.player2.path.includes(lastPlayer1)) {
+      player1Dead = true;
       console.log('Player 1 touch player2. Player 2 win');
       this.cancelInterval();
     }
 
     if (this.state.player1.path.includes(lastPlayer2)) {
+      player2Dead = true;
       console.log('Player 2 touch player1. Player 1 win');
       this.cancelInterval();
     }
     //
+    if (player1Dead && player2Dead) {
+      console.log('DRAW');
+    } else if (player1Dead) {
+      console.log('PLAYER 2 WIN');
+    } else if (player2Dead) {
+      console.log('PLAYER 1 WIN');
+    }
   };
 
   componentWillMount() {
@@ -230,7 +245,7 @@ class Game extends Component {
       border: calculateBorder(boxPerRow, boxPerColumn)
     });
 
-    const timerId = setInterval(this.updateIndex, 1000);
+    const timerId = setInterval(this.updateIndex, 300);
     this.setState({
       timerId
     });
