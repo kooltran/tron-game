@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Grid from '../grid/grid'
 
 const DIRECTION_UP = 'up';
 const DIRECTION_LEFT = 'left';
@@ -23,8 +24,8 @@ const mapPlayerToKeyToDirection = {
 const player1Keys = Object.keys(mapPlayerToKeyToDirection.player1);
 const player2Keys = Object.keys(mapPlayerToKeyToDirection.player2);
 
-const boxPerRow = 10;
 const boxPerColumn = 10;
+const boxPerRow = 50;
 
 const getNextIndex = currentIndex => direction => {
   let nextIndex = currentIndex;
@@ -251,7 +252,8 @@ class Game extends Component {
   };
 
   render() {
-    return <div className="Game" />;
+    const { map, player1, player2 } = this.state;
+    return <Grid initArr={map} player1={player1} player2={player2} />
   }
 }
 

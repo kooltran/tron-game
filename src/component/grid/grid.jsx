@@ -1,19 +1,25 @@
 import React from 'react';
+import classnames from 'classnames';
 import './grid.scss'
 
 
 export default class Grid extends React.Component {
     render() {
-        let initArr = [];
-        for (let i = 0; i < 400; i++) {
-            initArr.push(i)
-        }
-        const breakNum = 5;
+        const playerClassName = classnames({
+            "grid-item": true,
+
+        })
+        const { player1, player2 } = this.props;
+        console.log(player2.path)
         return (
             <div className="grid-wrapper">
                 {
-                    initArr.map(item => (
-                        <div key={item} className="grid-item">{item}</div>
+                    this.props.initArr.map(item => (
+                        <div id={item} key={item} className={classnames({
+                            'grid-item': true,
+                            'line-player1': player1.path.includes(item),
+                            'line-player2': player2.path.includes(item)
+                        })}></div>
                     ))
                 }
             </div>
