@@ -24,6 +24,7 @@ const player1Keys = Object.keys(mapPlayerToKeyToDirection.player1);
 const player2Keys = Object.keys(mapPlayerToKeyToDirection.player2);
 
 const boxPerRow = 10;
+const boxPerColumn = 10;
 
 const getNextIndex = currentIndex => direction => {
   let nextIndex = currentIndex;
@@ -81,8 +82,8 @@ class Game extends Component {
         direction: 'right'
       },
       player2: {
-        path: [20],
-        direction: 'down'
+        path: [18],
+        direction: 'left'
       }
     };
   }
@@ -120,13 +121,42 @@ class Game extends Component {
 
   checkCollision = () => {
     console.log(this.state);
-    // const lastPlayer1 = getLastIndex(prevState.player1.path);
-    // // const lastPlayer2 = getLastIndex(prevState.player2.path);
+    const lastPlayer1 = getLastIndex(this.state.player1.path);
 
-    // if (this.state.border.includes(lastPlayer1)) {
+    const lastPlayer2 = getLastIndex(this.state.player2.path);
 
-    // }
-    // //
+    // check border
+    if (this.state.border.includes(lastPlayer1)) {
+      console.log('Player1 touch border');
+      this.cancelInterval();
+    }
+    if (this.state.border.includes(lastPlayer2)) {
+      console.log('player2 touch border');
+      this.cancelInterval();
+    }
+
+    if (this.state.player1.path.slice(0, -1).includes(lastPlayer1)) {
+      // check touch itself
+      console.log('Player 1 touch itself');
+      this.cancelInterval();
+    }
+
+    if (this.state.player2.path.slice(0, -1).includes(lastPlayer2)) {
+      // check touch itself
+      console.log('Player 2 touch itself');
+      this.cancelInterval();
+    }
+
+    if (this.state.player2.path.includes(lastPlayer1)) {
+      console.log('Player 1 touch player2. Player 2 win');
+      this.cancelInterval();
+    }
+
+    if (this.state.player1.path.includes(lastPlayer2)) {
+      console.log('Player 2 touch player1. Player 1 win');
+      this.cancelInterval();
+    }
+    //
   };
 
   componentWillMount() {
@@ -138,9 +168,54 @@ class Game extends Component {
         } else {
           if (player1Keys.includes(e.key)) {
             const newDirection = mapPlayerToKeyToDirection['player1'][e.key];
+            switch (newDirection) {
+              case DIRECTION_UP:
+                if (this.state.player1.direction === DIRECTION_DOWN) {
+                  return;
+                }
+                break;
+              case DIRECTION_DOWN:
+                if (this.state.player1.direction === DIRECTION_UP) {
+                  return;
+                }
+                break;
+              case DIRECTION_RIGHT:
+                if (this.state.player1.direction === DIRECTION_LEFT) {
+                  return;
+                }
+                break;
+              case DIRECTION_LEFT:
+                if (this.state.player1.direction === DIRECTION_RIGHT) {
+                  return;
+                }
+                break;
+            }
+
             this.updatePlayerDirection('player1', newDirection);
           } else if (player2Keys.includes(e.key)) {
             const newDirection = mapPlayerToKeyToDirection['player2'][e.key];
+            switch (newDirection) {
+              case DIRECTION_UP:
+                if (this.state.player2.direction === DIRECTION_DOWN) {
+                  return;
+                }
+                break;
+              case DIRECTION_DOWN:
+                if (this.state.player2.direction === DIRECTION_UP) {
+                  return;
+                }
+                break;
+              case DIRECTION_RIGHT:
+                if (this.state.player2.direction === DIRECTION_LEFT) {
+                  return;
+                }
+                break;
+              case DIRECTION_LEFT:
+                if (this.state.player2.direction === DIRECTION_RIGHT) {
+                  return;
+                }
+                break;
+            }
             this.updatePlayerDirection('player2', newDirection);
           }
         }
@@ -151,7 +226,7 @@ class Game extends Component {
 
   componentDidMount() {
     this.setState({
-      border: calculateBorder(boxPerRow, boxPerRow)
+      border: calculateBorder(boxPerRow, boxPerColumn)
     });
 
     const timerId = setInterval(this.updateIndex, 1000);
